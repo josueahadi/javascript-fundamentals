@@ -1,13 +1,17 @@
 const convertNullableValues = (obj) => {
-    let result = { ...obj }; 
-    for (let key in result) {
-        if (result[key] === null) {
-            result[key] = 0;
-        } else if (result[key] === undefined) {
-            result[key] = '';
-        }
+    return {
+        ...obj,
+        ...Object.fromEntries(
+            Object.entries(obj).map(([key, value]) => {
+                if (value === null) {
+                    return [key, 0]
+                } else if (value === undefined) {
+                    return [key, ""]
+                }
+                return [key, value]
+            })
+        )
     }
-    return result;
 }
 
 const sampleData = {
