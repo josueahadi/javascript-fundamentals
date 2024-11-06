@@ -1,7 +1,11 @@
 Array.prototype.myMap = function(callbackFn) {
+    if (!Array.isArray(this)) {
+        throw new TypeError('myMap is only available on arrays');
+    }
+
     const result = [];
     for(let i = 0; i < this.length; i++) {
-        if (i in this) {
+        if (i in this) { // skip empty slots in arrays with missing elemntents (sparse arrays)
             result.push(callbackFn(this[i], i, this))
         }
     }
@@ -12,7 +16,7 @@ Array.prototype.myFilter = function(callbackFn) {
     const result = [];
     for (let i = 0; i < this.length; i++) {
         if ((callbackFn(this[i], i, this))) {
-            console.log(this[i])
+            // console.log(this[i])
             result.push(this[i])
         }
     }
@@ -20,31 +24,18 @@ Array.prototype.myFilter = function(callbackFn) {
 }
 
 Array.prototype.myReduce = function(callbackFn, initialValue) {
-    if (this.length === 0) {
-        return undefined
+    if (this.length === 0 && initialValue === undefined) {
+        return undefined;  // Edge case: Empty array with no initial value
     }
 
-    let accumulator;
+    let accumulator = initialValue === undefined ? this[0] : initialValue;
+    let startIndex = initialValue === undefined ? 1 : 0;
 
-    if (initialValue === null | undefined) {
-        accumulator = this[0];
-        for (let i = 1; i < this.length; i++) { 
-            console.log(callbackFn(accumulator, this[i], i))
-            accumulator = callbackFn(accumulator, this[i], i, this);
-            console.log(accumulator)
-        }
-        return accumulator
-    } else {
-        accumulator = initialValue;
-        for (let i = 0; i < this.length; i++) { 
-            console.log(callbackFn(accumulator, this[i], i))
-            accumulator = callbackFn(accumulator, this[i], i, this);
-            console.log(accumulator)
-        }
-        return accumulator
+    for (let i = startIndex; i < this.length; i++) {
+        accumulator = callbackFn(accumulator, this[i], i, this);
     }
-    
-    console.log(accumulator)
+
+    return accumulator;
 }
 
 Array.prototype.myForEach = function(callbackFn) {
