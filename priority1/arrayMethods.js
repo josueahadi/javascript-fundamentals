@@ -20,19 +20,25 @@ Array.prototype.myFilter = function(callbackFn) {
 }
 
 Array.prototype.myReduce = function(callbackFn, initialValue) {
+    if (this.length === 0) {
+        return undefined
+    }
+
     let accumulator;
 
     if (initialValue === null | undefined) {
         accumulator = this[0];
-        console.log(accumulator) //
-        // for (let i = 1; i < this.length; i++) { 
-        //     console.log(accumulator) //
-        // }
+        for (let i = 1; i < this.length; i++) { 
+            console.log(callbackFn(accumulator, this[i], i))
+            accumulator = callbackFn(accumulator, this[i], i, this);
+            console.log(accumulator)
+        }
+        return accumulator
     } else {
         accumulator = initialValue;
         for (let i = 0; i < this.length; i++) { 
             console.log(callbackFn(accumulator, this[i], i))
-            acccumulator = callbackFn(accumulator, this[i], i);
+            accumulator = callbackFn(accumulator, this[i], i, this);
             console.log(accumulator)
         }
         return accumulator
@@ -41,9 +47,12 @@ Array.prototype.myReduce = function(callbackFn, initialValue) {
     console.log(accumulator)
 }
 
-// const myForEach = () => {
-//     return undefined
-// }
+Array.prototype.myForEach = function(callbackFn) {
+    for (let i = 0; i < this.length; i++) {
+        callbackFn(this[i])
+    }
+    return undefined
+}
 
 // test data
 const numbers = [1, 2, 3, 4, 5];
@@ -56,35 +65,30 @@ const users = [
     { name: "Dave", age: 40, isActive: false }
 ];
 
-// callbacks
-// for myMap
+// myMap
 const square = (num) => num * num;
 const toUpperCase = (word) => word.toUpperCase();
 
-// for myFilter
-const isEven = (num) => num % 2 === 0;
-const isActiveUser = (user) => user.isActive;
-
-// for myReduce
-const sum = (acc, num) => acc + num;
-const concatenate = (acc, word) => acc + ' ' + word;
-
-// for myForeach
-const logItem = (item) => console.log(item);
-const logUserName = (user) => console.log(user.name);
-
-// myMap usage
 console.log(numbers.myMap(square)); // Expected: [1, 4, 9, 16, 25]
 console.log(text.myMap(toUpperCase)); // Expected: ["HELLO", "WORLD", "JAVASCRIPT", "ARRAY", "METHODS"]
 
 // myFilter
+const isEven = (num) => num % 2 === 0;
+const isActiveUser = (user) => user.isActive;
+
 console.log(numbers.myFilter(isEven)); // Expected: [2, 4]
 console.log(users.myFilter(isActiveUser)); // Expected: [{ name: "Alice", age: 25, isActive: true }, { name: "Charlie", age: 35, isActive: true }]
 
 // myReduce
-console.log(numbers.myReduce(sum, 0)); // Expected: 15
-//console.log(text.myReduce(concatenate, "")); // Expected: "hello world JavaScript array methods"
+const sum = (acc, num) => acc + num;
+const concatenate = (acc, word) => acc + ' ' + word;
 
-// // myForEach
-// numbers.myForEach(logItem); // Expected: Logs each number in the numbers array
-// users.myForEach(logUserName); // Expected: Logs each user's name in the users array
+console.log(numbers.myReduce(sum, 0)); // Expected: 15
+console.log(text.myReduce(concatenate, "")); // Expected: "hello world JavaScript array methods"
+
+// myForEach
+const logItem = (item) => console.log(item);
+const logUserName = (user) => console.log(user.name);
+
+numbers.myForEach(logItem); // Expected: Logs each number in the numbers array
+users.myForEach(logUserName); // Expected: Logs each user's name in the users array
