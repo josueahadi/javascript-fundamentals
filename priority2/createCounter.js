@@ -6,8 +6,11 @@ function createCounter() {
     }
 }
 
-const counter = createCounter();
+console.log(createCounter()()) //?
 
-console.log(counter())
-console.log(counter())
-console.log(counter())
+
+// const counter = createCounter();
+
+// console.log(counter())
+// console.log(counter())
+// console.log(counter())
