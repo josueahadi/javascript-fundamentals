@@ -28,7 +28,6 @@ const obj2 = {
 const descriptor2 = Object.getOwnPropertyDescriptor(obj2, "name");
 console.log(descriptor2); //
 /*
-Output:
 {
   get: [Function: get name],
   set: [Function: set name],
